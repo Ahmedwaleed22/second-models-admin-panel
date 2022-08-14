@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Register Form Start</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reportform.css') }}">
+    <link rel="stylesheet" media="screen and (max-width:1110px)" href="{{ url_for('static', filename='css/reportformphone.css') }}">
+</head>
+
+<body>
+    <header class="container">
+        <nav id="navbar">
+            <div id="logo">
+
+            </div>
+            <ul>
+                <li class="item"><a href="/" target="_blank">Home</a></li>
+                <li class="item"><a href="" target="_blank">Services</a></li>
+                <li class="item"><a href="">About Us</a></li>
+                <li class="item"><a href="" target="_blank">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        </div>
+    </header>
+    <form class="report-form" action="/register" method="post">
+        <div class="form-header">
+            <h1>Report Form</h1>
+        </div>
+
+
+        <div class="form-body">
+
+            <!-- Name -->
+            <div class="group" id="group-name">
+                <div class="form-group">
+                    <label for="name" class="label-title">Name *</label>
+                    <input type="text" id="name" class="form-input" placeholder="enter your name" required="required" />
+
+                </div>
+                <div class="form-group">
+                    <button class="btn" onclick="buss()" id="bussbtn">Save and Continue</button>
+                </div>
+            </div>
+
+            <!--Type of bussiness -->
+            <div class="group" id="group-bussiness">
+                <div class="form-group">
+                    <label class="label-title">Type of Bussiness</label>
+                    <div class="input-group">
+                        <label for="Manufacturing">
+                            <input type="radio" name="bussiness" value="manufacturing" id="manufacturing">
+                            Manufacturing</label>
+                        <label for="Service">
+                            <input type="radio" name="bussiness" value="service" id="service"> Service</label>
+                        <label for="Agriculture">
+                            <input type="radio" name="bussiness" value="agriculture" id="agriculture">
+                            Agriculture</label>
+                        <label for="Other">
+                            <input type="radio" name="bussiness" value="other" id="other"> Other</label>
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <button class="btn" onclick="need()" id="needbtn">Save and Continue</button>
+                </div>
+            </div>
+            <!-- What all you need -->
+            <div class="group" id="group-need">
+                <div class="form-group">
+                    <label class="label-title">What all do you need?</label>
+                    <div class="input-group">
+                        <label>
+                            <input class="click" type="checkbox" value="land" onclick="land_expand()">Land<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="land"
+                                required="required"></label>
+
+                        <label>
+                            <input class="click" type="checkbox" value="shed"
+                                onclick="shed_expand()">Shed/Building/Tank<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="shed"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="machinery" onclick="mach_expand()">
+                            Machinery<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="machinery"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="computer"
+                                onclick="comp_expand()">Computers/printers/photocopier/other electronics gadgets,
+                            etc<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="computer"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="furniture" onclick="fur_expand()">Furniture &
+                            Fixtures<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="furniture"
+                                required="required"></label>
+
+                        <label>
+                            <input class="click" type="checkbox" value="electricity"
+                                onclick="elect_expand()">Elictrificaion
+                            & electricity backup<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="electricity"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="racks" onclick="racks_expand()">Racks &
+                            storage<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="racks"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="vehicle" onclick="vehicle_expand()">Vehicle<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="vehicle"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="software" onclick="soft_expand()">Software
+                            Purchase<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="software"
+                                required="required"></label>
+
+                        <label>
+                            <input class="click" type="checkbox" value="expenditure" onclick="pexpand()">Other initial
+                            expenditure<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="expenditure"
+                                required="required"></label>
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <button class="btn" onclick="expense()" id="expensebtn">Save and Continue</button>
+                </div>
+
+            </div>
+
+            <!-- total need -->
+            <div class="group" id="group-need-total">
+                <div class="form-group">
+                    <label for="need-total" class="label-title">Confirm the amount entered *</label><br><br>
+                    <div class="total-group"><label for="totalneed">Total project cost:</label>
+                        <div id="totalneed"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Monthly Expense -->
+            <div class="group" id="group-expense">
+                <div class="form-group">
+                    <label class="label-title">Monthly Expense</label>
+                    <div class="input-group">
+                        <label>
+                            <input class="click" type="checkbox" value="rent" onclick="rent_expand()">Rented
+                            Building<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="rent"
+                                required="required"></label>
+
+                        <label>
+                            <input class="click" type="checkbox" value="salary" onclick="salary_expand()">Salary<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="salary"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="purchase" onclick="purchase_expand()">
+                            Purchase of consumables/ spare parts<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="purchase"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="stationary"
+                                onclick="stationary_expand()">Stationary
+                            expenses<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="stationary"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="water"
+                                onclick="water_expand()">Electricity/water
+                            expense<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="water"
+                                required="required"></label>
+
+                        <label>
+                            <input class="click" type="checkbox" value="repair" onclick="repair_expand()">Repair and
+                            maintenance charges<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="repair"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="cost" onclick="cost_expand()">Transportation
+                            cost<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="cost"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="postal"
+                                onclick="postal_expand()">Telephone/postal & internet charges<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="postal"
+                                required="required"></label>
+                        <label>
+                            <input class="click" type="checkbox" value="marketing"
+                                onclick="marketing_expand()">Marketing &
+                            advertising cost<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="marketing"
+                                required="required"></label>
+
+                        <label>
+                            <input class="click" type="checkbox" value="misc" onclick="misc_expand()">Miscellaneous
+                            expenses<br>
+                            <input type="text" placeholder="enter amount" class="form-input" id="misc"
+                                required="required"></label>
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <button class="btn" onclick="cap()" id="capbtn">Save and Continue</button>
+                </div>
+            </div>
+            <!-- total expense -->
+            <div class="group" id="group-expense-total">
+                <div class="form-group">
+                    <label for="expense-total" class="label-title">Confirm the amount entered *</label><br><br>
+                    <div class="total-group">
+                        <label for="totalexp">Total expense:</label>
+                        <div id="totalexpense"></div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Capital -->
+            <div class="group" id="group-capital">
+                <div class="form-group">
+                    <label for="capital" class="label-title">How much capital do you need? *</label>
+                    <input type="text" id="capital" class="form-input" placeholder="enter the capital needed"
+                        required="required" />
+
+                </div>
+                <div class="form-footer">
+                    <div class="form-group">
+                        <button class="btn" id="final">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</body>
+<script src="{{ url_for('static', filename='js/reportformdata.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reportform.js') }}"></script>
+
+</html>

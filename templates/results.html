@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/results.css') }}"
+    />
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <div class="download-button" id="submitBtn">
+      <i class="fa fa-download"></i>
+    </div>
+    <div class="wrapper" id="wrapper">
+      <header class="header">
+        <h1>Model Name</h1>
+        <p>
+          Quisque velit nisi, pretium ut lacinia in, elementum id enim.
+          Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.
+          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+          posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel,
+          ullamcorper sit amet ligula. Curabitur aliquet quam id dui posuere
+          blandit. Donec rutrum congue leo eget malesuada. Curabitur non nulla
+          sit amet nisl tempus convallis quis ac lectus. Lorem ipsum dolor sit
+          amet, consectetur adipiscing elit. Nulla quis lorem ut libero
+          malesuada feugiat. Mauris blandit aliquet elit, eget tincidunt nibh
+          pulvinar a.
+        </p>
+      </header>
+      <h1 class="title">First Table</h1>
+      {{ data|safe }}
+    </div>
+    <script>
+      document.addEventListener("contextmenu", (event) =>
+        event.preventDefault()
+      );
+
+      fetch("/config")
+        .then((result) => {
+          return result.json();
+        })
+        .then((data) => {
+          // Initialize Stripe.js
+          const stripe = Stripe(data.publicKey);
+
+          // new
+          // Event handler
+          document.querySelector("#submitBtn").addEventListener("click", () => {
+            // Get Checkout Session ID
+            fetch("/api/checkout/{{ model_id }}/" + `{{ answers|safe }}`)
+              .then((result) => {
+                return result.json();
+              })
+              .then((data) => {
+                console.log(data);
+                // Redirect to Stripe Checkout
+                return stripe.redirectToCheckout({ sessionId: data.sessionId });
+              })
+              .then((res) => {
+                console.log(res);
+              });
+          });
+        });
+    </script>
+  </body>
+</html>

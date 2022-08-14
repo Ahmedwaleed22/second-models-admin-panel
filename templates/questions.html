@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Interface</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" media="screen and (max-width:1110px)" href="{{ url_for('static', filename='css/phone.css') }}">
+</head>
+
+<body>
+    <header class="container">
+        <nav id="navbar">
+            <div id="logo">
+
+            </div>
+            <ul>
+                <li class="item"><a href="/" target="_blank">Home</a></li>
+                <li class="item"><a href="" target="_blank">Services</a></li>
+                <li class="item"><a href="">About Us</a></li>
+                <li class="item"><a href="" target="_blank">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        </div>
+    </header>
+    <main>
+        <div class="form-group">
+            <label id="question" for="name" class="label-title"></label>
+            <input type="text" id="amount" class="form-input" placeholder="Enter the amount" required="required" />
+            <button class="btn" id="loan-btn" onclick="nextQuestion()">Submit</button>
+        </div>
+
+        <div class="box-container">
+            <div id="outer-container1">
+                <div id="container1">
+                    <div class="box1">Box1</div>
+                    <div class="box1">Box1</div>
+                    <div class="box1">Box1</div>
+                </div>
+            </div>
+
+            <div id="outer-container2">
+                <div id="container2">
+                    <div class="box2">Box2</div>
+                    <div class="box2">Box2</div>
+                    <div class="box2">Box2</div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </main>
+    <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+    <script>
+        const questionLabel = document.getElementById("question");
+        const answer = document.getElementById("amount");
+        let questionNumber = 0;
+        const questions = eval("{{ questions|safe }}");
+        const numberOfQuestions = questions.length;
+        let answers = [];
+
+        const nextQuestion = () => {
+            if (questionNumber < numberOfQuestions - 1) {
+                let answerObject = {};
+                answerObject[questions[questionNumber]['question_key']] = answer.value;
+                answers.push(answerObject);
+                questionNumber++;
+                questionLabel.textContent = questions[questionNumber]['question'];
+            } else {
+                let answerObject = {};
+                answerObject[questions[questionNumber]['question_key']] = answer.value;
+                answers.push(answerObject);
+                location.href = `/results?model=${window.location.href.split('/').reverse()[0].split('?')[0]}&data=${JSON.stringify(answers)}&${window.location.href.split('/').reverse()[0].split('?')[1]}`;
+            }
+        }
+
+        questionLabel.textContent = questions[questionNumber]['question'];
+    </script>
+</body>
+</html>

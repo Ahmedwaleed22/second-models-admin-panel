@@ -1,0 +1,95 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+
+<body>
+    <header>
+        <div id="logo_box">
+            <img id="logo" src="{{ url_for('static', filename='img/img.webp') }}" alt="">
+            <span id="title_logo">Loan Report</span>
+        </div>
+        <ul>
+            <li><a href="" class="header_list">Prices</a> </li>
+            <li><a href="" class="header_list"> Resources</a></li>
+            <li><a href="" class="header_list" id="list3"> Sign in</a></li>
+            <li><a href="" class="header_list"> Contact us</a></li>
+        </ul>
+    </header>
+    <main>
+        <img class="image" src="{{ url_for('static', filename='img/bg.png') }}" alt="">
+        <div id="inner_container">
+            <div id="innermost_container">
+                <p id="primary">Looking for a bank loan ?</p>
+                <p id="secondary">Get your report in less than 10 minutes</p>
+            </div>
+            <form onsubmit="openPopup(event)">
+                <label for="name">Name</label>
+                <input type="text" id="name">
+                <label for="mobile">Mobile no</label>
+                <input type="text" id="mobile">
+                <label for="amount">Amount</label>
+                <select name="amount" id="amount">
+                    <option value="300000">Rs. 300000</option>
+                    <option value="500000">Rs. 300000</option>
+                    <option value="100000">Rs. 300000</option>
+                    <option value="1500000">Rs. 1500000</option>
+                </select>
+                <button id="form_btn">Submit</button>
+            </form>
+        </div>
+       
+    </main>
+    <div class="popup" id="popup">
+        <h6>Choose the Plan</h6>
+        <h2>How would you like to get started?</h2>
+        <div class="btns">
+            {% for model in models %}
+            <a onclick="chooseModel('{{ model.ID }}')">
+                <div class="boxes" id="box{{loop.index}}">
+                    <h4>{{ model.name }}</h4>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div>
+            <button class="close_btn" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+</body>
+<script>
+    let popup = document.getElementById("popup");
+
+    function openPopup(event) {
+        event.preventDefault();
+        popup.style.visibility = 'visible';
+        popup.style.top = '50%';
+        popup.style.transform = 'translate(-50%,-50%) scale(1)';
+    }
+    function closePopup() {
+        popup.style.visibility = 'hidden';
+        popup.style.top = '0%';
+        popup.style.transform = 'translate(-50%,-50%) scale(0.1)';
+    }
+
+    const chooseModel = (id) => {
+        const name = document.getElementById("name").value;
+        const mobile = document.getElementById("mobile").value;
+        const amount = document.getElementById("amount").value;
+
+        const data = {
+            name: name,
+            mobile: mobile,
+            amount: amount
+        };
+
+        window.location = `/questions/${id}?userinfo=${JSON.stringify(data)}`;
+    }
+</script>
+
+</html>

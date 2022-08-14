@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/results.css') }}"
+    />
+  </head>
+  <body>
+    <div class="download-button" onclick="ExportToDoc()">
+      <i class="fa fa-download"></i>
+    </div>
+    <div class="wrapper" id="wrapper">
+      <header class="header">
+        <h1>Model Name</h1>
+        <p>
+          Quisque velit nisi, pretium ut lacinia in, elementum id enim.
+          Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.
+          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+          posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel,
+          ullamcorper sit amet ligula. Curabitur aliquet quam id dui posuere
+          blandit. Donec rutrum congue leo eget malesuada. Curabitur non nulla
+          sit amet nisl tempus convallis quis ac lectus. Lorem ipsum dolor sit
+          amet, consectetur adipiscing elit. Nulla quis lorem ut libero
+          malesuada feugiat. Mauris blandit aliquet elit, eget tincidunt nibh
+          pulvinar a.
+        </p>
+      </header>
+      <h1 class="title">First Table</h1>
+      {{ tables|safe }}
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      function ExportToDoc(filename = "") {
+        var HtmlHead =
+          "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+
+        var EndHtml = "</body></html>";
+
+        //complete html
+        var html =
+          HtmlHead + document.getElementById("wrapper").innerHTML + EndHtml;
+
+        // //specify the type
+        // var blob = new Blob(["\ufeff", html], {
+        //   type: "application/msword",
+        // });
+
+        // // Specify link url
+        // var url =
+        //   "data:application/vnd.ms-word;charset=utf-8," +
+        //   encodeURIComponent(html);
+
+        // // Specify file name
+        // filename = filename ? filename + ".doc" : "document.doc";
+
+        // // Create download link element
+        // var downloadLink = document.createElement("a");
+
+        // document.body.appendChild(downloadLink);
+
+        // if (navigator.msSaveOrOpenBlob) {
+        //   navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //   // Create a link to the file
+        //   downloadLink.href = url;
+
+        //   // Setting the file name
+        //   downloadLink.download = filename;
+
+        //   //triggering the function
+        //   downloadLink.click();
+        // }
+
+        // document.body.removeChild(downloadLink);
+
+        html2pdf(html);
+      }
+    </script>
+  </body>
+</html>
