@@ -139,12 +139,14 @@ def results():
   data = request.args.get('data')
   userinfo = request.args.get('userinfo')
   cursor = mysql.connection.cursor()
+
+  print(modelID)
   
   cursor.execute("SELECT * FROM models WHERE id = %s", (modelID,))
   model = cursor.fetchone()
   cursor.close()
 
-  output = Popen(["python3", f'models/{model[4]}', data, userinfo], stdout=PIPE)
+  output = Popen(["python3", f'models/{model[4]}', str(data), str(userinfo)], stdout=PIPE)
   response, err = output.communicate()
 
   dataOutput = response.decode('utf-8')
@@ -295,8 +297,14 @@ def questionsAPI(user):
     question = request.json.get('question')
     question_key = request.json.get('question_key')
     model_id = request.json.get('model_id')
+    question_type = request.json.get('question_type')
+    answers = request.json.get('answers')
+
+    if answers == "":
+      answers = None
+
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO questions (question, question_key, model_id) VALUES (%s, %s, %s)", (question, question_key, model_id))
+    cur.execute("INSERT INTO questions (question, question_key, model_id, question_type, answers) VALUES (%s, %s, %s, %s, %s)", (question, question_key, model_id, question_type, answers))
     mysql.connection.commit()
     cur.close()
 
@@ -407,7 +415,7 @@ def checkoutApi(model, answers):
 
     # checkout using stripe
     price = stripe.Price.create(
-      currency='usd',
+      currency='inr',
       unit_amount=int(data[3]) * 100,
       product=product.id
     )

@@ -1,85 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Interface</title>
+    <meta charset="utf-8">
+    <title>Register Form Start</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" media="screen and (max-width:1110px)" href="{{ url_for('static', filename='css/phone.css') }}">
+    <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
 
 <body>
-    <header class="container">
-        <nav id="navbar">
-            <div id="logo">
-
-            </div>
-            <ul>
-                <li class="item"><a href="/" target="_blank">Home</a></li>
-                <li class="item"><a href="" target="_blank">Services</a></li>
-                <li class="item"><a href="">About Us</a></li>
-                <li class="item"><a href="" target="_blank">Contact Us</a></li>
-            </ul>
-        </nav>
-
-        </div>
-    </header>
-    <main>
-        <div class="form-group">
-            <label id="question" for="name" class="label-title"></label>
-            <input type="text" id="amount" class="form-input" placeholder="Enter the amount" required="required" />
-            <button class="btn" id="loan-btn" onclick="nextQuestion()">Submit</button>
+    <div class="report-form">
+        <div class="form-header">
+            <h1>Loan Report Form</h1>
         </div>
 
-        <div class="box-container">
-            <div id="outer-container1">
-                <div id="container1">
-                    <div class="box1">Box1</div>
-                    <div class="box1">Box1</div>
-                    <div class="box1">Box1</div>
+
+        <div class="form-body">
+            <div class="group" id="group-name">
+                <div class="form-group">
+                    <div id="first-question">
+                        <label id="question1" for="name" class="label-title"></label>
+                        <!-- <input type="text" name="amount1" class="form-input" placeholder="Enter the amount" required="required" /> -->
+                    </div>
+                    <button class="btn" id="bussbtn">Save and Continue</button>
                 </div>
             </div>
-
-            <div id="outer-container2">
-                <div id="container2">
-                    <div class="box2">Box2</div>
-                    <div class="box2">Box2</div>
-                    <div class="box2">Box2</div>
-                </div>
-            </div>
-
-
         </div>
-
-
-    </main>
-    <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+    </div>
     <script>
-        const questionLabel = document.getElementById("question");
-        const answer = document.getElementById("amount");
-        let questionNumber = 0;
+       
+        var bussbtn = document.getElementById('bussbtn');
+        var groupName = document.getElementById('group-name');
+        var questionNumber = 0;
         const questions = eval("{{ questions|safe }}");
         const numberOfQuestions = questions.length;
+        const firstQuestionContainer = document.getElementById('first-question');
+        let answerObject = {};
         let answers = [];
+        console.log(questions);
+        var i = 1;
+        if (questionNumber == 0) {
+            const questionLabe = document.getElementById("question1");
+            questionLabe.textContent = questions[questionNumber]['question'];
+            
+            const firstQuestionType = questions[questionNumber + 1]['question_type'];
 
-        const nextQuestion = () => {
-            if (questionNumber < numberOfQuestions - 1) {
-                let answerObject = {};
-                answerObject[questions[questionNumber]['question_key']] = answer.value;
-                answers.push(answerObject);
-                questionNumber++;
-                questionLabel.textContent = questions[questionNumber]['question'];
-            } else {
-                let answerObject = {};
-                answerObject[questions[questionNumber]['question_key']] = answer.value;
-                answers.push(answerObject);
-                location.href = `/results?model=${window.location.href.split('/').reverse()[0].split('?')[0]}&data=${JSON.stringify(answers)}&${window.location.href.split('/').reverse()[0].split('?')[1]}`;
+            if (firstQuestionType === 0) {
+                var input = document.createElement('input');
+                input.setAttribute('name', 'amount'+i);
+                input.setAttribute('class', 'form-input');
+                input.setAttribute('placeholder', 'Enter Amount');
+                input.setAttribute('required', 'required');
+                firstQuestionContainer.append(input);
+            } else if (firstQuestionType === 1) {
+                let options = questions[questionNumber + 1]['answers'].split(',');
+
+                options.forEach((option) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.style.margin = "10px 0";
+
+                    var input = document.createElement('input');
+                    input.setAttribute('type', 'checkbox');
+                    input.setAttribute('name', `amount${i}`);
+                    input.setAttribute('value', option);
+                    input.style.marginRight = "5px";
+                    optionDiv.append(input);
+
+                    var label = document.createElement('label');
+                    label.setAttribute('for', option);
+                    label.textContent = option;
+                    optionDiv.append(label);
+
+                    firstQuestionContainer.append(optionDiv);
+                });
+            } else if (firstQuestionType === 2) {
+                let options = questions[questionNumber + 1]['answers'].split(',');
+
+                options.forEach((option) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.style.margin = "10px 0";
+
+                    var input = document.createElement('input');
+                    input.setAttribute('type', 'radio');
+                    input.setAttribute('name', `amount${i}`);
+                    input.setAttribute('value', option);
+                    input.style.marginRight = "5px";
+                    optionDiv.append(input);
+
+                    var label = document.createElement('label');
+                    label.setAttribute('for', option);
+                    label.textContent = option;
+                    optionDiv.append(label);
+
+                    firstQuestionContainer.append(optionDiv);
+                });
             }
         }
 
-        questionLabel.textContent = questions[questionNumber]['question'];
+        bussbtn.addEventListener('click', () => nextQuestion());
+    
+        const nextQuestion = () => {
+            const answer = document.querySelector(`[name='amount${i}']`);
+            const optionsSelected = document.querySelectorAll(`[name='amount${i}']`);
+            const optionSelected = document.querySelector(`[name='amount${i}']:checked`);
+            answerObject[questions[questionNumber]['question_key']] = answer.value;
+            answers.push(answerObject);
+            i++;
+            if (questionNumber < numberOfQuestions - 1) {
+               
+                var div = document.createElement('div');
+                div.setAttribute('class', 'form-group');
+                groupName.append(div);
+    
+                var label = document.createElement('label');
+                label.setAttribute('id', 'question' + i);
+                label.setAttribute('for', 'name');
+                label.setAttribute('class', 'label-title');
+                div.append(label);
+    
+                const questionType = questions[questionNumber + 1]['question_type'];
+
+                if (questionType === 0) {
+                    var input = document.createElement('input');
+                    input.setAttribute('name', 'amount'+i);
+                    input.setAttribute('class', 'form-input');
+                    input.setAttribute('placeholder', 'Enter Amount');
+                    input.setAttribute('required', 'required');
+                    div.append(input);
+                } else if (questionType === 1) {
+                    let options = questions[questionNumber + 1]['answers'].split(',');
+
+                    options.forEach((option) => {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.style.margin = "10px 0";
+
+                        var input = document.createElement('input');
+                        input.setAttribute('type', 'checkbox');
+                        input.setAttribute('name', `amount${i}`);
+                        input.setAttribute('value', option);
+                        input.style.marginRight = "5px";
+                        optionDiv.append(input);
+    
+                        var label = document.createElement('label');
+                        label.setAttribute('for', option);
+                        label.textContent = option;
+                        optionDiv.append(label);
+
+                        div.append(optionDiv);
+                    });
+                } else if (questionType === 2) {
+                    let options = questions[questionNumber + 1]['answers'].split(',');
+
+                    options.forEach((option) => {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.style.margin = "10px 0";
+
+                        var input = document.createElement('input');
+                        input.setAttribute('type', 'radio');
+                        input.setAttribute('name', `amount${i}`);
+                        input.setAttribute('value', option);
+                        input.style.marginRight = "5px";
+                        optionDiv.append(input);
+    
+                        var label = document.createElement('label');
+                        label.setAttribute('for', option);
+                        label.textContent = option;
+                        optionDiv.append(label);
+
+                        div.append(optionDiv);
+                    });
+                }
+    
+                groupName.appendChild(bussbtn);
+                const questionLabel = document.getElementById("question" + i);
+                console.log(questionNumber);
+                if (questions[questionNumber]['question_type'] === 0) {
+                    answerObject[questions[questionNumber]['question_key']] = answer.value;
+                    answers.push(answerObject);
+                } else if (questions[questionNumber]['question_type'] === 1) {
+                    var selectedOptionsValue = [];
+
+                    optionsSelected.forEach((option) => {
+                        if (option.checked) selectedOptionsValue.push(option.value);
+                    })
+
+                    answerObject[questions[questionNumber]['question_key']] = selectedOptionsValue.join(',');
+                    answers.push(answerObject);
+                    selectedOptionsValue = [];
+                } else if (questions[questionNumber]['question_type'] === 2) {
+                    answerObject[questions[questionNumber]['question_key']] = optionSelected.value;
+                    answers.push(answerObject);
+                }
+                questionNumber++;
+                questionLabel.textContent = questions[questionNumber]['question'];
+            } else {
+                if (questions[questionNumber]['question_type'] === 0) {
+                    answerObject[questions[questionNumber]['question_key']] = answer.value;
+                    answers.push(answerObject);
+                } else if (questions[questionNumber]['question_type'] === 1) {
+                    var selectedOptionsValue = [];
+
+                    optionsSelected.forEach((option) => {
+                        if (option.checked) selectedOptionsValue.push(option.value);
+                    })
+
+                    answerObject[questions[questionNumber]['question_key']] = selectedOptionsValue.join(',');
+                    answers.push(answerObject);
+                    selectedOptionsValue = [];
+                } else if (questions[questionNumber]['question_type'] === 2) {
+                    answerObject[questions[questionNumber]['question_key']] = optionSelected.value;
+                    answers.push(answerObject);
+                }
+                location.href = `/results?model=${window.location.href.split('/').reverse()[0].split('?')[0]}&data=${JSON.stringify(answers[0])}&userinfo=${JSON.stringify(window.location.href.split('/').reverse()[0].split('?')[1])}`;
+            }
+        }
+    
     </script>
 </body>
+
 </html>
