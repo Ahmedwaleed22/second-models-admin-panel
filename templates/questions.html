@@ -158,14 +158,14 @@
               var input = document.createElement("input");
               input.setAttribute("type", "checkbox");
               input.setAttribute("name", `amount${i}`);
-              input.setAttribute("value", option);
+              input.setAttribute("value", option.split(":")[0]);
               input.setAttribute("data-checkbox", `amount${i}-${index}`);
               input.style.marginRight = "5px";
               optionDiv.append(input);
 
               var label = document.createElement("label");
               label.setAttribute("for", option);
-              label.textContent = option;
+              label.textContent = option.split(":")[1];
               optionDiv.append(label);
 
               var textField = document.createElement("input");
